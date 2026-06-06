@@ -1,0 +1,139 @@
+:root {
+    --bg: #0b1220;
+    --panel: #131d30;
+    --panel-hover: #18253d;
+    --border: #24314b;
+
+    --text: #edf2f7;
+    --text-secondary: #8ea2c2;
+
+    --green: #2ecc71;
+    --red: #ff5a5f;
+    --orange: #ffb020;
+    --blue: #3b82f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", sans-serif;
+}
+
+header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+    background: #0f1728;
+}
+
+header h1 {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+header p {
+    margin-top: 8px;
+    color: var(--text-secondary);
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    padding: 24px 32px;
+}
+
+.card {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.card .title {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.card .value {
+    font-size: 34px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+.table-container {
+    padding: 0 32px 32px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+thead {
+    background: #0f1728;
+}
+
+th {
+    text-align: left;
+    padding: 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr:hover {
+    background: var(--panel-hover);
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.pass {
+    background: var(--green);
+}
+
+.fail {
+    background: var(--red);
+}
+
+.warning {
+    background: var(--orange);
+}
+
+.board-id {
+    font-weight: bold;
+}
+
+.last-seen {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}

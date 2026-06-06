@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Diagnostic Console</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/dashboard.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>ESP32 Diagnostic Console</h1>
+</header>
+
+<div class="stats">
+
+    <div class="card">
+        <div class="title">Boards</div>
+        <div id="total">0</div>
+    </div>
+
+    <div class="card">
+        <div class="title">Passed</div>
+        <div id="passed">0</div>
+    </div>
+
+    <div class="card">
+        <div class="title">Failed</div>
+        <div id="failed">0</div>
+    </div>
+
+</div>
+
+<div class="table-container">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Board</th>
+                <th>BME280</th>
+                <th>LoRa</th>
+                <th>SD</th>
+                <th>WiFi</th>
+                <th>Overall</th>
+                <th>Last Seen</th>
+            </tr>
+        </thead>
+
+        <tbody id="tbody">
+        </tbody>
+
+    </table>
+
+</div>
+
+<script src="{{ url_for('static',
+filename='js/dashboard.js') }}"></script>
+
+</body>
+</html>
