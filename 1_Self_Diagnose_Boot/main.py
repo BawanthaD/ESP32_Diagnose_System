@@ -1,7 +1,8 @@
 import time
 import network
+import os, vfs
 import ustruct as struct
-from machine import Pin, SPI, I2C
+from machine import Pin, SPI, SoftSPI, I2C, SDCard
 from sx127x import SX127x
 import bme280_float as bme280
 
@@ -20,6 +21,11 @@ LED_PINS = [2, 38]   # example only
 # I2C pins
 I2C_SDA = 9
 I2C_SCL = 8
+
+SD_SCK  = 12
+SD_MOSI = 11   
+SD_MISO = 13   
+SD_CS   = 10   
 
 # LoRa pins
 lora_pins = {
@@ -93,7 +99,7 @@ def test_lora():
     global lora
 
     try:
-        lora_spi = SPI(
+        lora_spi = SoftSPI(
             baudrate=10000000,
             polarity=0,
             phase=0,
@@ -130,9 +136,61 @@ def test_wifi_basic():
 
 
 def test_sd_card():
-    # Keep this disabled first until SD pins/interface are confirmed.
-    print("SD test skipped")
-    return False
+    try:
+        print("Testing SD card...")
+
+        sd = SDCard(
+            slot=2,
+            sck=Pin(12),
+            miso=Pin(13),
+            mosi=Pin(11),
+            cs=Pin(10)
+        )
+
+        vfs.mount(sd, "/sd")
+        print("SD mounted")
+        print("Files:", os.listdir("/sd"))
+
+        test_file = "/sd/diag_test.txt"
+        test_data = "ESP32-S3 SD diagnostic OK"
+
+        with open(test_file, "w") as f:
+            f.write(test_data)
+            f.flush()
+
+        with open(test_file, "r") as f:
+            read_data = f.read()
+
+        if read_data != test_data:
+            print("SD read/write mismatch")
+            vfs.umount("/sd")
+            return False
+
+        os.remove(test_file)
+        vfs.umount("/sd")
+
+        print("SD test PASS")
+        return True
+
+    except Exception as e:
+        print("SD test FAIL:", e)
+
+        try:
+            vfs.umount("/sd")
+        except:
+            pass
+
+        return False
+
+    except Exception as e:
+        print("SD test FAIL:", e)
+
+        try:
+            os.umount("/sd")
+        except:
+            pass
+
+        return False
 
 
 def run_boot_diagnostics():
