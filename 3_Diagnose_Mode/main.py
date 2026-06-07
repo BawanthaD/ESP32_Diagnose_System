@@ -1,8 +1,8 @@
 import time
 from machine import Pin
 
-DIAG_BUTTON_PIN = 0      # change to your button pin
-DIAG_ACTIVE_LEVEL = 0    # active-low button
+DIAG_BUTTON_PIN = 0   
+DIAG_ACTIVE_LEVEL = 0
 
 
 def diagnostic_button_held():
