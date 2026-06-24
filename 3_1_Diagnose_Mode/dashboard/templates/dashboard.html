@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Diagnostic Console</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+<header class="page-header">
+    <div>
+        <h1>ESP32 Diagnostic Console</h1>
+        <p>Live diagnostic reports, sensor readings, memory usage, and dashboard-controlled test skips.</p>
+    </div>
+    <button id="refresh-btn" type="button">Refresh now</button>
+</header>
+
+<section class="stats">
+    <div class="card stat-card">
+        <div class="title">Boards</div>
+        <div id="total" class="metric">0</div>
+    </div>
+    <div class="card stat-card">
+        <div class="title">Passed</div>
+        <div id="passed" class="metric">0</div>
+    </div>
+    <div class="card stat-card">
+        <div class="title">Warnings</div>
+        <div id="warnings" class="metric">0</div>
+    </div>
+    <div class="card stat-card">
+        <div class="title">Failed</div>
+        <div id="failed" class="metric">0</div>
+    </div>
+    <div class="card stat-card">
+        <div class="title">Skipped as Pass</div>
+        <div id="skipped-pass" class="metric">0</div>
+    </div>
+</section>
+
+<section class="card global-config">
+    <div class="section-header">
+        <div>
+            <h2>Global skip defaults</h2>
+            <p>These tests are skipped for every board that asks the server for configuration. Skipped tests are counted as pass but still shown as skipped.</p>
+        </div>
+        <button id="save-global-btn" type="button">Save global skips</button>
+    </div>
+    <div id="global-skip-list" class="checkbox-grid"></div>
+</section>
+
+<main id="boards-container" class="boards-container">
+    <div class="empty">Waiting for boards...</div>
+</main>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
