@@ -32,5 +32,5 @@ if diagnostic_button_held():
     import diagnostic
     diagnostic.run()
 else:
-    import transmit
-    transmit.run()
+    import tx
+    tx.run()

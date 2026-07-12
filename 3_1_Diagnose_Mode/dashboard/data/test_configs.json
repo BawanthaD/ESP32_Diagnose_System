@@ -1,17 +1,16 @@
 {
   "28-37-2f-95-d3-5c": {
     "note": "",
-    "skip_tests": [],
-    "updated_at": "2026-06-25 00:20:07 W. Europe Daylight Time"
-  },
-  "global": {
-    "note": "",
     "skip_tests": [
       "ds18b20_reading",
       "sd_card",
-      "sdi12_soil_reading",
-      "server_upload"
+      "sdi12_soil_reading"
     ],
-    "updated_at": "2026-06-25 00:20:10 W. Europe Daylight Time"
+    "updated_at": "2026-07-01 20:43:25 W. Europe Daylight Time"
+  },
+  "global": {
+    "note": "",
+    "skip_tests": [],
+    "updated_at": null
   }
 }

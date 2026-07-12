@@ -2,93 +2,75 @@
   "28-37-2f-95-d3-5c": {
     "board_id": "molenet-esp32s3",
     "dashboard_config": {
-      "board_skip_tests": [],
-      "device_key": "28-37-2f-95-d3-5c",
-      "global_skip_tests": [
+      "board_skip_tests": [
         "ds18b20_reading",
         "sd_card",
-        "sdi12_soil_reading",
-        "server_upload"
+        "sdi12_soil_reading"
       ],
+      "device_key": "28-37-2f-95-d3-5c",
+      "global_skip_tests": [],
       "note": "",
       "skip_tests": [
         "ds18b20_reading",
         "sd_card",
-        "sdi12_soil_reading",
-        "server_upload"
+        "sdi12_soil_reading"
       ],
-      "updated_at": "2026-06-25 00:20:07 W. Europe Daylight Time"
+      "updated_at": "2026-07-01 20:43:25 W. Europe Daylight Time"
     },
     "device_key": "28-37-2f-95-d3-5c",
     "esp32_unique_id": "28-37-2f-95-d3-5c",
-    "last_seen": "2026-06-25 00:21:12 W. Europe Daylight Time",
-    "last_seen_sort": "2026-06-24T22:21:12.536000+00:00",
-    "overall": "PASS",
-    "results": {
+    "first_seen": "2026-07-11 10:07:56 W. Europe Daylight Time",
+    "last_seen": "2026-07-11 10:07:56 W. Europe Daylight Time",
+    "last_seen_sort": "2026-07-11T08:07:56.960490+00:00",
+    "overall": "FAIL",
+    "raw_results": {
       "bme280_reading": {
         "detail": {
-          "address_found": [
-            "0x76"
+          "elapsed_ms": 7950,
+          "error": "BME280 address not found on I2C bus",
+          "expected": [
+            "0x76",
+            "0x77"
           ],
-          "elapsed_ms": 580,
-          "import_errors_before_success": [
-            "BME280: no module named 'BME280'"
-          ],
+          "i2c_devices": [],
           "memory_after": {
-            "allocated_bytes": 37952,
-            "free_bytes": 188288,
-            "total_bytes": 226240,
-            "used_percent": 16.8
+            "allocated_bytes": 31744,
+            "free_bytes": 145344,
+            "total_bytes": 177088,
+            "used_percent": 17.9
           },
           "memory_before": {
-            "allocated_bytes": 31552,
-            "free_bytes": 194688,
-            "total_bytes": 226240,
-            "used_percent": 13.9
-          },
-          "module": "bme280_float",
-          "parsed": {
-            "humidity_percent": 52.07,
-            "pressure_hpa": 1018.66,
-            "temperature_c": 29.02
-          },
-          "raw": {
-            "humidity": "52.07%",
-            "pressure": "1018.66hPa",
-            "temperature": "29.02C"
-          },
-          "warnings": []
+            "allocated_bytes": 31440,
+            "free_bytes": 145648,
+            "total_bytes": 177088,
+            "used_percent": 17.8
+          }
         },
-        "status": "PASS"
+        "status": "FAIL"
       },
       "ds18b20_reading": {
         "detail": {
-          "previous_detail": {
-            "data_pin": 42,
-            "elapsed_ms": 49,
-            "error": "no DS18B20 ROMs found",
-            "memory_after": {
-              "allocated_bytes": 39472,
-              "free_bytes": 186768,
-              "total_bytes": 226240,
-              "used_percent": 17.4
-            },
-            "memory_before": {
-              "allocated_bytes": 38368,
-              "free_bytes": 187872,
-              "total_bytes": 226240,
-              "used_percent": 17.0
-            }
+          "data_pin": 42,
+          "elapsed_ms": 44,
+          "error": "no DS18B20 ROMs found",
+          "memory_after": {
+            "allocated_bytes": 33104,
+            "free_bytes": 143984,
+            "total_bytes": 177088,
+            "used_percent": 18.7
           },
-          "previous_status": "FAIL",
-          "reason": "Test skipped from dashboard and counted as pass",
-          "skipped_by_dashboard": true
+          "memory_before": {
+            "allocated_bytes": 32000,
+            "free_bytes": 145088,
+            "total_bytes": 177088,
+            "used_percent": 18.1
+          }
         },
-        "status": "SKIP_PASS"
+        "status": "FAIL"
       },
       "gpio_software": {
         "detail": {
-          "elapsed_ms": 92,
+          "elapsed_ms": 95,
           "failures": [],
           "init_only": [
             {
@@ -98,25 +80,25 @@
               "pin": 8
             },
             {
-              "level": 1,
+              "level": 0,
               "name": "i2c_sda",
               "ok": true,
               "pin": 9
             },
             {
-              "level": 1,
+              "level": 0,
               "name": "sd_sck",
               "ok": true,
               "pin": 12
             },
             {
-              "level": 1,
+              "level": 0,
               "name": "sd_miso",
               "ok": true,
               "pin": 13
             },
             {
-              "level": 1,
+              "level": 0,
               "name": "sd_mosi",
               "ok": true,
               "pin": 11
@@ -140,19 +122,19 @@
               "pin": 21
             },
             {
-              "level": 0,
+              "level": 1,
               "name": "lora_mosi",
               "ok": true,
               "pin": 47
             },
             {
-              "level": 0,
+              "level": 1,
               "name": "lora_cs",
               "ok": true,
               "pin": 48
             },
             {
-              "level": 0,
+              "level": 1,
               "name": "lora_reset",
               "ok": true,
               "pin": 15
@@ -164,19 +146,19 @@
               "pin": 46
             },
             {
-              "level": 0,
+              "level": 1,
               "name": "ds18b20_data",
               "ok": true,
               "pin": 42
             },
             {
-              "level": 1,
+              "level": 0,
               "name": "sdi12_rx",
               "ok": true,
               "pin": 18
             },
             {
-              "level": 0,
+              "level": 1,
               "name": "sdi12_tx",
               "ok": true,
               "pin": 17
@@ -185,15 +167,15 @@
           "input_pull": [],
           "memory_after": {
             "allocated_bytes": 29712,
-            "free_bytes": 196528,
-            "total_bytes": 226240,
-            "used_percent": 13.1
+            "free_bytes": 147376,
+            "total_bytes": 177088,
+            "used_percent": 16.8
           },
           "memory_before": {
             "allocated_bytes": 28192,
-            "free_bytes": 198048,
-            "total_bytes": 226240,
-            "used_percent": 12.5
+            "free_bytes": 148896,
+            "total_bytes": 177088,
+            "used_percent": 15.9
           },
           "note": "software-level GPIO check only; not a physical continuity test",
           "output_readback": [
@@ -259,22 +241,20 @@
       },
       "i2c_bus": {
         "detail": {
-          "devices": [
-            "0x76"
-          ],
-          "elapsed_ms": 165,
+          "devices": [],
+          "elapsed_ms": 7949,
           "freq": 10000,
           "memory_after": {
-            "allocated_bytes": 31184,
-            "free_bytes": 195056,
-            "total_bytes": 226240,
-            "used_percent": 13.8
+            "allocated_bytes": 31152,
+            "free_bytes": 145936,
+            "total_bytes": 177088,
+            "used_percent": 17.6
           },
           "memory_before": {
             "allocated_bytes": 30976,
-            "free_bytes": 195264,
-            "total_bytes": 226240,
-            "used_percent": 13.7
+            "free_bytes": 146112,
+            "total_bytes": 177088,
+            "used_percent": 17.5
           },
           "scl": 8,
           "sda": 9
@@ -287,18 +267,18 @@
             2,
             38
           ],
-          "elapsed_ms": 511,
+          "elapsed_ms": 512,
           "memory_after": {
             "allocated_bytes": 30608,
-            "free_bytes": 195632,
-            "total_bytes": 226240,
-            "used_percent": 13.5
+            "free_bytes": 146480,
+            "total_bytes": 177088,
+            "used_percent": 17.3
           },
           "memory_before": {
             "allocated_bytes": 30464,
-            "free_bytes": 195776,
-            "total_bytes": 226240,
-            "used_percent": 13.5
+            "free_bytes": 146624,
+            "total_bytes": 177088,
+            "used_percent": 17.2
           },
           "note": "visual check: verify the LEDs blinked"
         },
@@ -306,30 +286,32 @@
       },
       "lora_radio": {
         "detail": {
-          "driver": "sx127x.SX127x",
-          "elapsed_ms": 411,
+          "driver": "SX1276.Transceiver",
+          "elapsed_ms": 1664,
+          "lorawan_joined": true,
+          "lorawan_object": "initialized",
           "memory_after": {
-            "allocated_bytes": 48240,
-            "free_bytes": 178000,
-            "total_bytes": 226240,
-            "used_percent": 21.3
+            "allocated_bytes": 52384,
+            "free_bytes": 124704,
+            "total_bytes": 177088,
+            "used_percent": 29.6
           },
           "memory_before": {
-            "allocated_bytes": 40736,
-            "free_bytes": 185504,
-            "total_bytes": 226240,
-            "used_percent": 18.0
+            "allocated_bytes": 40144,
+            "free_bytes": 136944,
+            "total_bytes": 177088,
+            "used_percent": 22.7
           },
           "pins": {
-            "dio_0": 46,
+            "cs": 48,
+            "dio0": 46,
             "miso": 21,
             "mosi": 47,
             "reset": 15,
-            "sck": 14,
-            "ss": 48
+            "sck": 14
           },
           "radio": "initialized",
-          "test_tx": "attempted"
+          "spi": "initialized"
         },
         "status": "PASS"
       },
@@ -337,86 +319,76 @@
         "detail": {
           "datetime": [
             2026,
-            6,
-            25,
-            3,
-            0,
-            21,
             7,
-            737417
+            11,
+            5,
+            10,
+            7,
+            35,
+            306237
           ],
           "elapsed_ms": 10,
           "memory_after": {
             "allocated_bytes": 27888,
-            "free_bytes": 198352,
-            "total_bytes": 226240,
-            "used_percent": 12.3
+            "free_bytes": 149200,
+            "total_bytes": 177088,
+            "used_percent": 15.7
           },
           "memory_before": {
             "allocated_bytes": 27728,
-            "free_bytes": 198512,
-            "total_bytes": 226240,
-            "used_percent": 12.3
+            "free_bytes": 149360,
+            "total_bytes": 177088,
+            "used_percent": 15.7
           }
         },
         "status": "PASS"
       },
       "sd_card": {
         "detail": {
-          "previous_detail": {
-            "elapsed_ms": 64,
-            "error": "OSError(16,)",
-            "memory_after": {
-              "allocated_bytes": 40880,
-              "free_bytes": 185360,
-              "total_bytes": 226240,
-              "used_percent": 18.1
-            },
-            "memory_before": {
-              "allocated_bytes": 40368,
-              "free_bytes": 185872,
-              "total_bytes": 226240,
-              "used_percent": 17.8
-            }
+          "elapsed_ms": 550,
+          "freq": 200000,
+          "memory_after": {
+            "allocated_bytes": 39920,
+            "free_bytes": 137168,
+            "total_bytes": 177088,
+            "used_percent": 22.5
           },
-          "previous_status": "FAIL",
-          "reason": "Test skipped from dashboard and counted as pass",
-          "skipped_by_dashboard": true
+          "memory_before": {
+            "allocated_bytes": 35104,
+            "free_bytes": 141984,
+            "total_bytes": 177088,
+            "used_percent": 19.8
+          },
+          "mount_method": "os.mount",
+          "pins": {
+            "cs": 10,
+            "miso": 13,
+            "mosi": 11,
+            "sck": 12
+          },
+          "slot": 2,
+          "test": "mount + write + read + delete OK"
         },
-        "status": "SKIP_PASS"
+        "status": "PASS"
       },
       "sdi12_soil_reading": {
         "detail": {
-          "previous_detail": {
-            "elapsed_ms": 35,
-            "error": "ImportError(\"no module named 'SDI12'\",)",
-            "memory_after": {
-              "allocated_bytes": 40064,
-              "free_bytes": 186176,
-              "total_bytes": 226240,
-              "used_percent": 17.7
-            },
-            "memory_before": {
-              "allocated_bytes": 39744,
-              "free_bytes": 186496,
-              "total_bytes": 226240,
-              "used_percent": 17.6
-            }
+          "elapsed_ms": 1910,
+          "error": "ValueError(\"expected 3 values after parsing, got 1 from 'None'\",)",
+          "memory_after": {
+            "allocated_bytes": 34880,
+            "free_bytes": 142208,
+            "total_bytes": 177088,
+            "used_percent": 19.7
           },
-          "previous_status": "FAIL",
-          "reason": "Test skipped from dashboard and counted as pass",
-          "skipped_by_dashboard": true
+          "memory_before": {
+            "allocated_bytes": 33376,
+            "free_bytes": 143712,
+            "total_bytes": 177088,
+            "used_percent": 18.8
+          }
         },
-        "status": "SKIP_PASS"
-      },
-      "server_upload": {
-        "detail": {
-          "previous_detail": {},
-          "previous_status": "UNKNOWN",
-          "reason": "Test skipped from dashboard and counted as pass",
-          "skipped_by_dashboard": true
-        },
-        "status": "SKIP_PASS"
+        "status": "FAIL"
       },
       "system_memory": {
         "detail": {
@@ -424,21 +396,21 @@
           "freq_hz": 160000000,
           "memory": {
             "allocated_bytes": 27392,
-            "free_bytes": 198848,
-            "total_bytes": 226240,
-            "used_percent": 12.1
+            "free_bytes": 149696,
+            "total_bytes": 177088,
+            "used_percent": 15.5
           },
           "memory_after": {
             "allocated_bytes": 27344,
-            "free_bytes": 198896,
-            "total_bytes": 226240,
-            "used_percent": 12.1
+            "free_bytes": 149744,
+            "total_bytes": 177088,
+            "used_percent": 15.4
           },
           "memory_before": {
             "allocated_bytes": 26848,
-            "free_bytes": 199392,
-            "total_bytes": 226240,
-            "used_percent": 11.9
+            "free_bytes": 150240,
+            "total_bytes": 177088,
+            "used_percent": 15.2
           },
           "python": "(name='micropython', version=(1, 28, 0, ''), _machine='Generic ESP32S3 module with ESP32S3', _mpy=11014, _build='ESP32_GENERIC_S3', _thread='GIL')",
           "reset_cause": 5,
@@ -458,42 +430,489 @@
           "active": true,
           "connected": true,
           "dns": "192.168.137.1",
-          "elapsed_ms": 1598,
+          "elapsed_ms": 17,
           "gateway": "192.168.137.1",
-          "ip": "192.168.137.128",
+          "ip": "192.168.137.31",
           "mac": "28-37-2f-95-d3-5c",
           "memory_after": {
-            "allocated_bytes": 48640,
-            "free_bytes": 134592,
-            "total_bytes": 183232,
-            "used_percent": 26.5
+            "allocated_bytes": 52736,
+            "free_bytes": 124352,
+            "total_bytes": 177088,
+            "used_percent": 29.8
           },
           "memory_before": {
-            "allocated_bytes": 48288,
-            "free_bytes": 177952,
-            "total_bytes": 226240,
-            "used_percent": 21.3
+            "allocated_bytes": 52384,
+            "free_bytes": 124704,
+            "total_bytes": 177088,
+            "used_percent": 29.6
           },
           "netmask": "255.255.255.0",
-          "rssi_dbm": -48,
+          "rssi_dbm": -37,
           "scan_count": null,
           "ssid": "BAWANTHA-LEGION 4449"
         },
         "status": "PASS"
       }
     },
-    "summary": {
-      "failed": 0,
-      "final_memory": {
-        "allocated_bytes": 48944,
-        "free_bytes": 134288,
-        "total_bytes": 183232,
-        "used_percent": 26.7
+    "results": {
+      "bme280_reading": {
+        "detail": {
+          "elapsed_ms": 7950,
+          "error": "BME280 address not found on I2C bus",
+          "expected": [
+            "0x76",
+            "0x77"
+          ],
+          "i2c_devices": [],
+          "memory_after": {
+            "allocated_bytes": 31744,
+            "free_bytes": 145344,
+            "total_bytes": 177088,
+            "used_percent": 17.9
+          },
+          "memory_before": {
+            "allocated_bytes": 31440,
+            "free_bytes": 145648,
+            "total_bytes": 177088,
+            "used_percent": 17.8
+          }
+        },
+        "status": "FAIL"
       },
-      "passed": 8,
+      "ds18b20_reading": {
+        "detail": {
+          "previous_detail": {
+            "data_pin": 42,
+            "elapsed_ms": 44,
+            "error": "no DS18B20 ROMs found",
+            "memory_after": {
+              "allocated_bytes": 33104,
+              "free_bytes": 143984,
+              "total_bytes": 177088,
+              "used_percent": 18.7
+            },
+            "memory_before": {
+              "allocated_bytes": 32000,
+              "free_bytes": 145088,
+              "total_bytes": 177088,
+              "used_percent": 18.1
+            }
+          },
+          "previous_status": "FAIL",
+          "reason": "Test skipped from dashboard and counted as pass",
+          "skipped_by_dashboard": true
+        },
+        "status": "SKIP_PASS"
+      },
+      "gpio_software": {
+        "detail": {
+          "elapsed_ms": 95,
+          "failures": [],
+          "init_only": [
+            {
+              "level": 0,
+              "name": "i2c_scl",
+              "ok": true,
+              "pin": 8
+            },
+            {
+              "level": 0,
+              "name": "i2c_sda",
+              "ok": true,
+              "pin": 9
+            },
+            {
+              "level": 0,
+              "name": "sd_sck",
+              "ok": true,
+              "pin": 12
+            },
+            {
+              "level": 0,
+              "name": "sd_miso",
+              "ok": true,
+              "pin": 13
+            },
+            {
+              "level": 0,
+              "name": "sd_mosi",
+              "ok": true,
+              "pin": 11
+            },
+            {
+              "level": 1,
+              "name": "sd_cs",
+              "ok": true,
+              "pin": 10
+            },
+            {
+              "level": 0,
+              "name": "lora_sck",
+              "ok": true,
+              "pin": 14
+            },
+            {
+              "level": 0,
+              "name": "lora_miso",
+              "ok": true,
+              "pin": 21
+            },
+            {
+              "level": 1,
+              "name": "lora_mosi",
+              "ok": true,
+              "pin": 47
+            },
+            {
+              "level": 1,
+              "name": "lora_cs",
+              "ok": true,
+              "pin": 48
+            },
+            {
+              "level": 1,
+              "name": "lora_reset",
+              "ok": true,
+              "pin": 15
+            },
+            {
+              "level": 0,
+              "name": "lora_dio0",
+              "ok": true,
+              "pin": 46
+            },
+            {
+              "level": 1,
+              "name": "ds18b20_data",
+              "ok": true,
+              "pin": 42
+            },
+            {
+              "level": 0,
+              "name": "sdi12_rx",
+              "ok": true,
+              "pin": 18
+            },
+            {
+              "level": 1,
+              "name": "sdi12_tx",
+              "ok": true,
+              "pin": 17
+            }
+          ],
+          "input_pull": [],
+          "memory_after": {
+            "allocated_bytes": 29712,
+            "free_bytes": 147376,
+            "total_bytes": 177088,
+            "used_percent": 16.8
+          },
+          "memory_before": {
+            "allocated_bytes": 28192,
+            "free_bytes": 148896,
+            "total_bytes": 177088,
+            "used_percent": 15.9
+          },
+          "note": "software-level GPIO check only; not a physical continuity test",
+          "output_readback": [
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "status_led",
+              "ok": true,
+              "pin": 2,
+              "restore": 0
+            },
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "aux_led",
+              "ok": true,
+              "pin": 38,
+              "restore": 0
+            },
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "sdi12_power",
+              "ok": true,
+              "pin": 1,
+              "restore": 0
+            },
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "sdi12_tx_enable",
+              "ok": true,
+              "pin": 35,
+              "restore": 0
+            },
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "sdi12_rx_enable",
+              "ok": true,
+              "pin": 36,
+              "restore": 0
+            },
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "sdi12_marking",
+              "ok": true,
+              "pin": 37,
+              "restore": 1
+            },
+            {
+              "high_readback": 1,
+              "low_readback": 0,
+              "name": "ds18b20_power",
+              "ok": true,
+              "pin": 41,
+              "restore": 0
+            }
+          ]
+        },
+        "status": "PASS"
+      },
+      "i2c_bus": {
+        "detail": {
+          "devices": [],
+          "elapsed_ms": 7949,
+          "freq": 10000,
+          "memory_after": {
+            "allocated_bytes": 31152,
+            "free_bytes": 145936,
+            "total_bytes": 177088,
+            "used_percent": 17.6
+          },
+          "memory_before": {
+            "allocated_bytes": 30976,
+            "free_bytes": 146112,
+            "total_bytes": 177088,
+            "used_percent": 17.5
+          },
+          "scl": 8,
+          "sda": 9
+        },
+        "status": "PASS"
+      },
+      "leds_visual": {
+        "detail": {
+          "blinked_pins": [
+            2,
+            38
+          ],
+          "elapsed_ms": 512,
+          "memory_after": {
+            "allocated_bytes": 30608,
+            "free_bytes": 146480,
+            "total_bytes": 177088,
+            "used_percent": 17.3
+          },
+          "memory_before": {
+            "allocated_bytes": 30464,
+            "free_bytes": 146624,
+            "total_bytes": 177088,
+            "used_percent": 17.2
+          },
+          "note": "visual check: verify the LEDs blinked"
+        },
+        "status": "PASS"
+      },
+      "lora_radio": {
+        "detail": {
+          "driver": "SX1276.Transceiver",
+          "elapsed_ms": 1664,
+          "lorawan_joined": true,
+          "lorawan_object": "initialized",
+          "memory_after": {
+            "allocated_bytes": 52384,
+            "free_bytes": 124704,
+            "total_bytes": 177088,
+            "used_percent": 29.6
+          },
+          "memory_before": {
+            "allocated_bytes": 40144,
+            "free_bytes": 136944,
+            "total_bytes": 177088,
+            "used_percent": 22.7
+          },
+          "pins": {
+            "cs": 48,
+            "dio0": 46,
+            "miso": 21,
+            "mosi": 47,
+            "reset": 15,
+            "sck": 14
+          },
+          "radio": "initialized",
+          "spi": "initialized"
+        },
+        "status": "PASS"
+      },
+      "rtc": {
+        "detail": {
+          "datetime": [
+            2026,
+            7,
+            11,
+            5,
+            10,
+            7,
+            35,
+            306237
+          ],
+          "elapsed_ms": 10,
+          "memory_after": {
+            "allocated_bytes": 27888,
+            "free_bytes": 149200,
+            "total_bytes": 177088,
+            "used_percent": 15.7
+          },
+          "memory_before": {
+            "allocated_bytes": 27728,
+            "free_bytes": 149360,
+            "total_bytes": 177088,
+            "used_percent": 15.7
+          }
+        },
+        "status": "PASS"
+      },
+      "sd_card": {
+        "detail": {
+          "previous_detail": {
+            "elapsed_ms": 550,
+            "freq": 200000,
+            "memory_after": {
+              "allocated_bytes": 39920,
+              "free_bytes": 137168,
+              "total_bytes": 177088,
+              "used_percent": 22.5
+            },
+            "memory_before": {
+              "allocated_bytes": 35104,
+              "free_bytes": 141984,
+              "total_bytes": 177088,
+              "used_percent": 19.8
+            },
+            "mount_method": "os.mount",
+            "pins": {
+              "cs": 10,
+              "miso": 13,
+              "mosi": 11,
+              "sck": 12
+            },
+            "slot": 2,
+            "test": "mount + write + read + delete OK"
+          },
+          "previous_status": "PASS",
+          "reason": "Test skipped from dashboard and counted as pass",
+          "skipped_by_dashboard": true
+        },
+        "status": "SKIP_PASS"
+      },
+      "sdi12_soil_reading": {
+        "detail": {
+          "previous_detail": {
+            "elapsed_ms": 1910,
+            "error": "ValueError(\"expected 3 values after parsing, got 1 from 'None'\",)",
+            "memory_after": {
+              "allocated_bytes": 34880,
+              "free_bytes": 142208,
+              "total_bytes": 177088,
+              "used_percent": 19.7
+            },
+            "memory_before": {
+              "allocated_bytes": 33376,
+              "free_bytes": 143712,
+              "total_bytes": 177088,
+              "used_percent": 18.8
+            }
+          },
+          "previous_status": "FAIL",
+          "reason": "Test skipped from dashboard and counted as pass",
+          "skipped_by_dashboard": true
+        },
+        "status": "SKIP_PASS"
+      },
+      "system_memory": {
+        "detail": {
+          "elapsed_ms": 21,
+          "freq_hz": 160000000,
+          "memory": {
+            "allocated_bytes": 27392,
+            "free_bytes": 149696,
+            "total_bytes": 177088,
+            "used_percent": 15.5
+          },
+          "memory_after": {
+            "allocated_bytes": 27344,
+            "free_bytes": 149744,
+            "total_bytes": 177088,
+            "used_percent": 15.4
+          },
+          "memory_before": {
+            "allocated_bytes": 26848,
+            "free_bytes": 150240,
+            "total_bytes": 177088,
+            "used_percent": 15.2
+          },
+          "python": "(name='micropython', version=(1, 28, 0, ''), _machine='Generic ESP32S3 module with ESP32S3', _mpy=11014, _build='ESP32_GENERIC_S3', _thread='GIL')",
+          "reset_cause": 5,
+          "uname": {
+            "machine": "Generic ESP32S3 module with ESP32S3",
+            "nodename": "esp32",
+            "release": "1.28.0",
+            "sysname": "esp32",
+            "version": "v1.28.0 on 2026-04-06"
+          },
+          "unique_id": "28-37-2f-95-d3-5c"
+        },
+        "status": "PASS"
+      },
+      "wifi_connection": {
+        "detail": {
+          "active": true,
+          "connected": true,
+          "dns": "192.168.137.1",
+          "elapsed_ms": 17,
+          "gateway": "192.168.137.1",
+          "ip": "192.168.137.31",
+          "mac": "28-37-2f-95-d3-5c",
+          "memory_after": {
+            "allocated_bytes": 52736,
+            "free_bytes": 124352,
+            "total_bytes": 177088,
+            "used_percent": 29.8
+          },
+          "memory_before": {
+            "allocated_bytes": 52384,
+            "free_bytes": 124704,
+            "total_bytes": 177088,
+            "used_percent": 29.6
+          },
+          "netmask": "255.255.255.0",
+          "rssi_dbm": -37,
+          "scan_count": null,
+          "ssid": "BAWANTHA-LEGION 4449"
+        },
+        "status": "PASS"
+      }
+    },
+    "run_count": 1,
+    "summary": {
+      "failed": 1,
+      "final_memory": {
+        "allocated_bytes": 52960,
+        "free_bytes": 124128,
+        "total_bytes": 177088,
+        "used_percent": 29.9
+      },
+      "passed": 7,
       "skipped": 0,
-      "skipped_pass": 4,
-      "test_count": 12,
+      "skipped_pass": 3,
+      "test_count": 11,
       "unknown": 0,
       "warnings": 0
     },

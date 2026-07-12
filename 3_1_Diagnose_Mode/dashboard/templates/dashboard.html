@@ -10,12 +10,21 @@
 <header class="page-header">
     <div>
         <h1>ESP32 Diagnostic Console</h1>
-        <p>Live diagnostic reports, sensor readings, memory usage, and dashboard-controlled test skips.</p>
+        <p>Latest result for each board, sensor readings, memory usage, and dashboard-controlled test skips.</p>
     </div>
-    <button id="refresh-btn" type="button">Refresh now</button>
+    <div class="header-actions">
+        <button id="refresh-btn" type="button">Refresh now</button>
+        <button id="reset-all-btn" class="danger" type="button">Reset all board results</button>
+    </div>
 </header>
 
-<section class="stats">
+<section class="status-strip" aria-live="polite">
+    <span id="connection-state" class="dot-text"><span class="dot unknown"></span>Loading…</span>
+    <span id="last-refresh">Last refresh: —</span>
+    <span id="auto-refresh-note">Auto-refresh every 3 s</span>
+</section>
+
+<section class="stats" aria-label="Diagnostic summary">
     <div class="card stat-card">
         <div class="title">Boards</div>
         <div id="total" class="metric">0</div>
@@ -38,11 +47,27 @@
     </div>
 </section>
 
+<section class="card toolbar" aria-label="Board filters">
+    <label>
+        Search board
+        <input id="board-search" type="search" placeholder="board id, device key, ESP32 ID…">
+    </label>
+    <label>
+        Status filter
+        <select id="status-filter">
+            <option value="all">All</option>
+            <option value="PASS">Passed</option>
+            <option value="WARN">Warnings</option>
+            <option value="FAIL">Failed</option>
+        </select>
+    </label>
+</section>
+
 <section class="card global-config">
     <div class="section-header">
         <div>
             <h2>Global skip defaults</h2>
-            <p>These tests are skipped for every board that asks the server for configuration. Skipped tests are counted as pass but still shown as skipped.</p>
+            <p>Applies to every board. Skipped tests are shown as <strong>Skipped → Pass</strong>. The original submitted result is kept internally so you can unskip later.</p>
         </div>
         <button id="save-global-btn" type="button">Save global skips</button>
     </div>
@@ -50,8 +75,10 @@
 </section>
 
 <main id="boards-container" class="boards-container">
-    <div class="empty">Waiting for boards...</div>
+    <div class="empty">Waiting for boards…</div>
 </main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>

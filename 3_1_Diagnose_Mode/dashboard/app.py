@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timezone
+from copy import deepcopy
 import json
 import os
 
@@ -17,7 +18,7 @@ TEST_CATALOG = [
     {"name": "system_memory", "label": "System / Memory", "critical": True},
     {"name": "rtc", "label": "RTC", "critical": False},
     {"name": "gpio_software", "label": "GPIO Software", "critical": True},
-    {"name": "leds_visual", "label": "LED Visual", "critical": False},
+    # {"name": "leds_visual", "label": "LED Visual", "critical": False},
     {"name": "i2c_bus", "label": "I2C Bus", "critical": True},
     {"name": "bme280_reading", "label": "BME280 Reading", "critical": True},
     {"name": "ds18b20_reading", "label": "DS18B20 Reading", "critical": False},
@@ -25,16 +26,74 @@ TEST_CATALOG = [
     {"name": "sd_card", "label": "SD Card", "critical": False},
     {"name": "lora_radio", "label": "LoRa Radio", "critical": True},
     {"name": "wifi_connection", "label": "WiFi Connection", "critical": False},
-    {"name": "server_upload", "label": "Server Upload", "critical": False},
 ]
 
 SKIPPABLE_TEST_NAMES = {item["name"] for item in TEST_CATALOG}
 IGNORED_TEST_RESULTS = {"required_main_modules"}
 METADATA_RESULTS = {"server_upload"}
 
+LEGACY_TEST_MAP = {
+    "system": "system_memory",
+    "led_gpio": "gpio_software",
+    "bme280": "bme280_reading",
+    "lora": "lora_radio",
+    "wifi": "wifi_connection",
+}
+
+boards = {}
+test_configs = {}
+
+
+def ensure_data_dir():
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+
+def load_json(path, default):
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data if isinstance(data, type(default)) else default
+    except Exception:
+        return default
+
+
+def save_json(path, data):
+    ensure_data_dir()
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=2, sort_keys=True)
+    os.replace(tmp, path)
+
+
+def now_iso():
+    return datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
+
+
+def now_sort_iso():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def clean_status(status):
+    if status is None:
+        return "UNKNOWN"
+    status = str(status).strip().upper()
+    if status == "WARNING":
+        return "WARN"
+    return status or "UNKNOWN"
+
 
 def valid_skip_tests(names):
     return sorted({str(name) for name in (names or []) if str(name) in SKIPPABLE_TEST_NAMES})
+
+
+def board_key(report):
+    """Stable key used to store one latest result per physical board."""
+    return (
+        str(report.get("esp32_unique_id") or "").strip()
+        or str(report.get("device_id") or "").strip()
+        or str(report.get("board_id") or "").strip()
+        or "UNKNOWN_BOARD"
+    )
 
 
 def move_non_test_results(report):
@@ -56,76 +115,6 @@ def move_non_test_results(report):
         report.pop("ignored_results", None)
 
     return report
-
-LEGACY_TEST_MAP = {
-    "system": "system_memory",
-    "led_gpio": "gpio_software",
-    "bme280": "bme280_reading",
-    "lora": "lora_radio",
-    "wifi": "wifi_connection",
-}
-
-boards = {}
-test_configs = {}
-
-
-def ensure_data_dir():
-    os.makedirs(DATA_DIR, exist_ok=True)
-
-
-def load_json(path, default):
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            return json.load(file)
-    except Exception:
-        return default
-
-
-def save_json(path, data):
-    ensure_data_dir()
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=2, sort_keys=True)
-    os.replace(tmp, path)
-
-
-def load_state():
-    global boards, test_configs
-    boards = load_json(BOARDS_FILE, {})
-    test_configs = load_json(CONFIGS_FILE, {})
-    if "global" not in test_configs:
-        test_configs["global"] = {"skip_tests": [], "updated_at": None, "note": ""}
-    for config in test_configs.values():
-        config["skip_tests"] = valid_skip_tests(config.get("skip_tests", []))
-
-def save_boards():
-    save_json(BOARDS_FILE, boards)
-
-
-def save_configs():
-    save_json(CONFIGS_FILE, test_configs)
-
-
-def now_iso():
-    return datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
-
-
-def clean_status(status):
-    if status is None:
-        return "UNKNOWN"
-    status = str(status).upper()
-    if status == "WARNING":
-        return "WARN"
-    return status
-
-
-def board_key(report):
-    return (
-        str(report.get("esp32_unique_id") or "").strip()
-        or str(report.get("device_id") or "").strip()
-        or str(report.get("board_id") or "").strip()
-        or "UNKNOWN_BOARD"
-    )
 
 
 def normalise_results(report):
@@ -157,6 +146,38 @@ def normalise_results(report):
     return report
 
 
+def extract_raw_results(report):
+    """
+    Keep the board's original test result separate from dashboard skip overrides.
+
+    Older saved files may only have overridden SKIP_PASS values. When possible, restore
+    the original status/detail from the stored previous_status/previous_detail fields.
+    """
+    if isinstance(report.get("raw_results"), dict):
+        return deepcopy(report["raw_results"])
+
+    raw_results = deepcopy(report.get("results", {}))
+    for test_name, result in list(raw_results.items()):
+        if not isinstance(result, dict):
+            raw_results[test_name] = {"status": clean_status(result), "detail": {}}
+            continue
+
+        status = clean_status(result.get("status"))
+        detail = result.get("detail", {}) if isinstance(result.get("detail"), dict) else {}
+        if status == "SKIP_PASS" and detail.get("skipped_by_dashboard"):
+            raw_results[test_name] = {
+                "status": clean_status(detail.get("previous_status")),
+                "detail": detail.get("previous_detail", {}) if isinstance(detail.get("previous_detail"), dict) else {},
+            }
+        else:
+            raw_results[test_name] = {
+                "status": status,
+                "detail": detail,
+            }
+
+    return raw_results
+
+
 def get_config(device_key):
     global_config = test_configs.get("global", {})
     board_config = test_configs.get(device_key, {})
@@ -180,13 +201,14 @@ def apply_dashboard_skips(report):
     key = report["device_key"]
     effective_config = get_config(key)
     skip_tests = set(effective_config.get("skip_tests", []))
-    results = report.setdefault("results", {})
+    raw_results = extract_raw_results(report)
+    effective_results = deepcopy(raw_results)
 
     for test_name in sorted(skip_tests):
-        previous = results.get(test_name, {})
+        previous = raw_results.get(test_name, {})
         previous_status = clean_status(previous.get("status")) if isinstance(previous, dict) else clean_status(previous)
         previous_detail = previous.get("detail", {}) if isinstance(previous, dict) else {}
-        results[test_name] = {
+        effective_results[test_name] = {
             "status": "SKIP_PASS",
             "detail": {
                 "skipped_by_dashboard": True,
@@ -196,6 +218,8 @@ def apply_dashboard_skips(report):
             },
         }
 
+    report["raw_results"] = raw_results
+    report["results"] = effective_results
     report["dashboard_config"] = effective_config
     return report
 
@@ -236,12 +260,56 @@ def summarise(report):
     return report
 
 
+def recompute_board(report):
+    report = apply_dashboard_skips(report)
+    report = summarise(report)
+    return report
+
+
+def recompute_saved_boards(device_key=None):
+    changed = False
+    keys = list(boards.keys()) if device_key in (None, "global") else [device_key]
+    for key in keys:
+        if key in boards and isinstance(boards[key], dict):
+            boards[key] = recompute_board(boards[key])
+            changed = True
+    if changed:
+        save_boards()
+
+
+def load_state():
+    global boards, test_configs
+    boards = load_json(BOARDS_FILE, {})
+    test_configs = load_json(CONFIGS_FILE, {})
+
+    if "global" not in test_configs:
+        test_configs["global"] = {"skip_tests": [], "updated_at": None, "note": ""}
+
+    for config in test_configs.values():
+        if isinstance(config, dict):
+            config["skip_tests"] = valid_skip_tests(config.get("skip_tests", []))
+
+    # Migrate older stored board data into the new raw_results + display results structure.
+    for key, report in list(boards.items()):
+        if isinstance(report, dict):
+            report.setdefault("device_key", key)
+            boards[key] = recompute_board(report)
+
+
+def save_boards():
+    save_json(BOARDS_FILE, boards)
+
+
+def save_configs():
+    save_json(CONFIGS_FILE, test_configs)
+
+
 @app.route("/")
 def dashboard():
     return render_template("dashboard.html")
 
 
-@app.route("/api/boards")
+@app.route("/api/boards", methods=["GET"])
 def get_boards():
     ordered = sorted(
         boards.values(),
@@ -249,6 +317,36 @@ def get_boards():
         reverse=True,
     )
     return jsonify(ordered)
+
+
+@app.route("/api/boards", methods=["DELETE"])
+def reset_all_boards():
+    boards.clear()
+    save_boards()
+    return jsonify({"status": "ok", "message": "All stored board results were reset", "cleared": "all"})
+
+
+@app.route("/api/boards/reset", methods=["POST"])
+def reset_all_boards_post():
+    return reset_all_boards()
+
+
+@app.route("/api/board/<path:device_key>", methods=["DELETE"])
+def reset_board(device_key):
+    existed = device_key in boards
+    boards.pop(device_key, None)
+    save_boards()
+    return jsonify({
+        "status": "ok",
+        "message": "Stored board result was reset" if existed else "No stored result found for this board",
+        "device_key": device_key,
+        "cleared": existed,
+    })
+
+
+@app.route("/api/board/<path:device_key>/reset", methods=["POST"])
+def reset_board_post(device_key):
+    return reset_board(device_key)
 
 
 @app.route("/api/test-catalog")
@@ -269,6 +367,8 @@ def get_test_config(device_key):
 @app.route("/api/test-config/<path:device_key>", methods=["POST"])
 def update_test_config(device_key):
     payload = request.get_json(silent=True) or {}
+    if not isinstance(payload, dict):
+        return jsonify({"status": "error", "message": "JSON object expected"}), 400
 
     current = test_configs.get(device_key, {"skip_tests": [], "updated_at": None, "note": ""})
 
@@ -293,6 +393,7 @@ def update_test_config(device_key):
     current["updated_at"] = now_iso()
     test_configs[device_key] = current
     save_configs()
+    recompute_saved_boards(device_key)
 
     return jsonify(get_config(device_key))
 
@@ -306,16 +407,32 @@ def diagnostic():
     data = normalise_results(data)
     data = move_non_test_results(data)
     data["device_key"] = board_key(data)
-    data["last_seen"] = now_iso()
-    data["last_seen_sort"] = datetime.now(timezone.utc).isoformat()
 
-    data = apply_dashboard_skips(data)
-    data = summarise(data)
+    previous = boards.get(data["device_key"], {})
+    was_overwritten = bool(previous)
+    seen_at = now_iso()
+    data["first_seen"] = previous.get("first_seen") or seen_at
+    data["last_seen"] = seen_at
+    data["last_seen_sort"] = now_sort_iso()
+    data["run_count"] = int(previous.get("run_count", 0) or 0) + 1
 
+    # Store original submitted results separately so dashboard skips can be toggled
+    # later without destroying the real test outcome.
+    data["raw_results"] = extract_raw_results(data)
+    data = recompute_board(data)
+
+    # This intentionally overwrites the previous result for the same physical board.
+    # The dashboard is a latest-result view, not a historical log.
     boards[data["device_key"]] = data
     save_boards()
 
-    return jsonify({"status": "ok", "device_key": data["device_key"], "overall": data["overall"]})
+    return jsonify({
+        "status": "ok",
+        "device_key": data["device_key"],
+        "overall": data["overall"],
+        "overwritten_previous_result": was_overwritten,
+        "run_count": data["run_count"],
+    })
 
 
 load_state()
